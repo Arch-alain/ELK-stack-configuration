@@ -1,0 +1,7 @@
+yellow open   .ds-metrics-apm.transaction.1m-default-2025.05.10-000001         kkcqjSYmTYCK1XRmwZm0-g   1   1         14            0     73.9kb         73.9kb
+yellow open   .ds-metrics-apm.service_transaction.1m-default-2025.05.10-000001 mSw4vxnVRqmwcI3Mx51Y7g   1   1          7            0     46.8kb         46.8kb
+green  open   .internal.alerts-observability.apm.alerts-default-000001         KbO-6bghSVad765zMQxoqg   1   0          0            0       248b           248b
+yellow open   .ds-metrics-apm.internal-default-2025.05.10-000001               7Q3mzAwdQVqQMG85F8EHWw   1   1        551            0      676kb          676kb
+yellow open   .ds-metrics-apm.service_summary.1m-default-2025.05.10-000001     Iu0EPHNER4eEUhsX_ehtXA   1   1        358            0      186kb          186kb
+yellow open   .ds-logs-apm.error-default-2025.05.10-000001                     CuW5XAfYTEWktd439eW_Lg   1   1         10            0    206.9kb        206.9kb
+yellow open   .ds-traces-apm-default-2025.05.10-000001                         ej5kVN2STcWSJwm0HajMgQ   1   1         39            0    310.7kb        310.7kb

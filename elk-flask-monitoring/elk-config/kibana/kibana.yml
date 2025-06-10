@@ -1,0 +1,5 @@
+server.host: "0.0.0.0"
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS1zZXJ2aWNlLXRva2VuOmhFWWY0UTdTUXhpZEpwUEo4ekhXU2c"
+xpack.apm.serviceMapEnabled: true
+xpack.encryptedSavedObjects.encryptionKey: 82dd2d2ce7c00183df4da9dab904e2a3

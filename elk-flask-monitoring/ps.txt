@@ -1,0 +1,12 @@
+CONTAINER ID   IMAGE                                                  COMMAND                  CREATED        STATUS                   PORTS                                            NAMES
+b50e6f3b7f62   apache/airflow:3.0.1                                   "/usr/bin/dumb-init …"   38 hours ago   Up 13 hours (healthy)    8080/tcp                                         airflowlearning-airflow-worker-1
+35c6045fead5   apache/airflow:3.0.1                                   "/usr/bin/dumb-init …"   38 hours ago   Up 13 hours (healthy)    8080/tcp                                         airflowlearning-airflow-dag-processor-1
+c6a844f262e8   apache/airflow:3.0.1                                   "/usr/bin/dumb-init …"   38 hours ago   Up 13 hours (healthy)    8080/tcp                                         airflowlearning-airflow-triggerer-1
+3c7e695c5f27   apache/airflow:3.0.1                                   "/usr/bin/dumb-init …"   38 hours ago   Up 13 hours (healthy)    0.0.0.0:8080->8080/tcp                           airflowlearning-airflow-apiserver-1
+79ddd3af6980   apache/airflow:3.0.1                                   "/usr/bin/dumb-init …"   38 hours ago   Up 11 hours (healthy)    8080/tcp                                         airflowlearning-airflow-scheduler-1
+c696f5c4663f   redis:7.2-bookworm                                     "docker-entrypoint.s…"   38 hours ago   Up 13 hours (healthy)    6379/tcp                                         airflowlearning-redis-1
+1fc8cd468e5f   postgres:13                                            "docker-entrypoint.s…"   38 hours ago   Up 13 hours (healthy)    5432/tcp                                         airflowlearning-postgres-1
+d9454b09c3ce   mysql:8.0                                              "docker-entrypoint.s…"   6 days ago     Up 4 minutes (healthy)   0.0.0.0:3306->3306/tcp, 33060/tcp                mysql
+af02b36e40e7   docker.elastic.co/apm/apm-server:8.10.2                "/usr/bin/tini -- /u…"   2 weeks ago    Up 3 minutes (healthy)   0.0.0.0:8200->8200/tcp                           apm-server
+ce43736a36df   docker.elastic.co/kibana/kibana:8.10.2                 "/bin/tini -- /usr/l…"   2 weeks ago    Up 3 minutes (healthy)   0.0.0.0:5601->5601/tcp                           kibana
+29af0e8eb0fa   docker.elastic.co/elasticsearch/elasticsearch:8.10.2   "/bin/tini -- /usr/l…"   2 weeks ago    Up 4 minutes (healthy)   0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp   elasticsearch

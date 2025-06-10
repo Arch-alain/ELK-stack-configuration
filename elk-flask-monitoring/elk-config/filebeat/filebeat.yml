@@ -1,0 +1,131 @@
+# filebeat.inputs:
+# - type: log
+#   enabled: true
+#   paths:
+#     - /var/log/flask/app.log
+#   tags: ["flask-app"]
+# - type: log
+#   enabled: true
+#   paths:
+#     - /var/log/flask/app.log
+#   tags: ["system"]
+# processors:
+#   - add_docker_metadata:
+#       host: "unix:///var/run/docker.sock"
+#       match_fields: ["log.file.path"]
+#       match_patt: "/var/log/flask/*.log"
+#       labels.dedot: true
+
+# output.elasticsearch:
+#   hosts: ["http://elasticsearch:9200"]
+#   username: "elastic"
+#   password: "changeme"
+# setup.kibana:
+#   host: "http://kibana:5601"
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/flask/app.log
+  fields:
+    service: flask-app
+    environment: development
+  fields_under_root: true
+  multiline.pattern: '^\d{4}-\d{2}-\d{2}'
+  multiline.negate: true
+  multiline.match: after
+  processors:
+    - dissect:
+        tokenizer: "%{timestamp} %{level} %{logger}: %{message}"
+        field: "message"
+        target_prefix: "log"
+    - script:
+        lang: javascript
+        source: >
+          function process(event) {
+            var message = event.Get("log.message");
+            if (message) {
+              // Extract error types
+              if (message.includes("DATABASE_CONNECTION_ERROR")) {
+                event.Put("error.type", "database_connection");
+                event.Put("alert.severity", "critical");
+              } else if (message.includes("DATABASE_ERROR")) {
+                event.Put("error.type", "database_general");
+                event.Put("alert.severity", "high");
+              } else if (message.includes("VALIDATION_ERROR")) {
+                event.Put("error.type", "validation");
+                event.Put("alert.severity", "medium");
+              } else if (message.includes("BUSINESS_LOGIC_ERROR")) {
+                event.Put("error.type", "business_logic");
+                event.Put("alert.severity", "medium");
+              } else if (message.includes("UNEXPECTED_ERROR")) {
+                event.Put("error.type", "unexpected");
+                event.Put("alert.severity", "high");
+              }
+              
+              // Extract operation context
+              if (message.includes("Failed to add book")) {
+                event.Put("operation", "add_book");
+              } else if (message.includes("Failed to retrieve book")) {
+                event.Put("operation", "get_book");
+              } else if (message.includes("Failed to list books")) {
+                event.Put("operation", "list_books");
+              }
+              
+              // Set log level based on severity
+              var level = event.Get("log.level");
+              if (level) {
+                event.Put("log.level", level.toLowerCase());
+              }
+            }
+          }
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"
+  index: "flask-app-logs-%{+yyyy.MM.dd}"
+  template.name: "flask-app-logs"
+  template.pattern: "flask-app-logs-*"
+  template.settings:
+    index.number_of_shards: 1
+    index.number_of_replicas: 0
+    index.refresh_interval: "5s"
+  template.mappings:
+    properties:
+      "@timestamp":
+        type: date
+      log.timestamp:
+        type: date
+        format: "yyyy-MM-dd HH:mm:ss,SSS"
+      log.level:
+        type: keyword
+      log.logger:
+        type: keyword
+      log.message:
+        type: text
+        analyzer: standard
+      error.type:
+        type: keyword
+      alert.severity:
+        type: keyword
+      operation:
+        type: keyword
+      service:
+        type: keyword
+      environment:
+        type: keyword
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_docker_metadata: ~
