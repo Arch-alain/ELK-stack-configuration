@@ -225,12 +225,3 @@ curl -u elastic:changeme -X GET "http://localhost:9200/apm-*/_search?pretty" -H 
 
 ---
 
-## 🔒 Notes
-
-- **Security**: Change `changeme` password in production.
-- **Persistence**: Data stored in `elk_data`, `mysql_data`, `kb_data`
-- **License**: Basic license limits advanced ELK features
-
----
-
-**Date**: Initial setup as of **June 10, 2025**
